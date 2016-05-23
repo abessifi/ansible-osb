@@ -218,35 +218,30 @@ For quick tests, you can spinup a CentOS VM using Vagrant. You maybe need to ada
 - Change the Vagrant box name in the Vagrantfile if needed.
 
 - Create the virtual machine:
-
-
-	(host)$ vagrant up --no-provision
-
+```
+(host)$ vagrant up --no-provision
+```
 - Update the `/etc/hosts` in the host machine and the VM accordingly to reach the addresses `db.weblogic.local` and `osb.weblogic.local`:
-
-
+```
 	<db-server-address>   db.weblogic.local
 	<osb-server-address>  osb.weblogic.local
-
+```
 - Create a working directory to copy installer files to:
-
-
+```
 	[vagrant@ansible-vm ~]$ sudo mkdir /srv/files/ && sudo chown vagrant:vagrant /srv/files/
-
+```
 - Copy downloaded installer JAR files:
-
-
+```
 	(host)$ rsync -iav /path/to/{fmw_12.2.1.0.0_infrastructure.jar,jdk-8u77-linux-x64.rpm,fmw_12.2.1.0.0_osb.jar} vagrant@osb.weblogic.local:/srv/files/
-
+```
 - Download the required Ansible roles to install and configure the Oracle JDK and the WebLogic platform (not required if your box is already provision):
-
-
+```
 	(host)$ sudo ansible-galaxy install -p /etc/ansible/roles/ -r requirements.txt
-
+```
 - Install all stuff !
-
-
+```
 	(host)$ vargant provision
+```
 
 ## Run acceptance tests
 
