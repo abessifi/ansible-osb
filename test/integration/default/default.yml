@@ -1,0 +1,29 @@
+---
+
+- hosts: localhost
+  roles:
+    - role: abessifi.java
+      java_version: 8
+      java_jdk_type: 'oracle'
+      oracle_jdk_rpm_package: 'jdk-8u77-linux-x64.rpm'
+      oracle_jdk_rpm_url: 'http://download.oracle.com/otn-pub/java/jdk/8u77-b03/jdk-8u77-linux-x64.rpm'
+      rpm_download_directory: '/srv/files'
+      java_set_as_default: true
+      tags:
+        - install-java
+
+    - role: abessifi.weblogic
+      weblogic_jar_path: '/srv/files/fmw_12.2.1.0.0_infrastructure.jar'
+      weblogic_quick_installation: false
+      weblogic_installation_type: 'Fusion Middleware Infrastructure'
+      weblogic_domain_name: 'osb_domain'
+
+    - role: ansible-osb
+      osb_jar_path: '/srv/files/fmw_12.2.1.0.0_osb.jar'
+      oracle_db_address: 'db.weblogic.local'
+      oracle_db_sid: 'xe.oracle.docker'
+      oracle_db_password: 'oracle'
+      osb_schemas_common_password: 'oracle'
+      osb_domain_name: 'osb_domain'
+      osb_admin_server_listen_address: 'osb.weblogic.local'
+      osb_managed_server_listen_address: 'osb.weblogic.local'

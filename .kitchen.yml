@@ -1,0 +1,34 @@
+---
+
+driver:
+  name: vagrant
+  customize:
+    memory: 4096
+    cpus: 2
+
+provisioner:
+  name: ansible_playbook
+  requirements_path: requirements.txt
+  hosts: localhost
+  require_ansible_repo: false
+  ansible_verbose: true
+  require_chef_for_busser: false
+  require_ruby_for_busser: false
+
+verifier:
+  ruby_bindir: '/usr/bin'
+
+platforms:
+  - name: 'centos_7_x64'
+    driver_config:
+      box: 'abessifi/centos-7.1-ansible'
+      network:
+        - [ 'private_network', { ip: '192.168.33.111' } ]
+
+suites:
+  - name: default
+    attributes:
+      tags:
+        - install-java
+        - wls-plain-install
+        - osb-plain-install

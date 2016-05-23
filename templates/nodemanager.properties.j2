@@ -1,0 +1,31 @@
+#
+# This file is managed by Ansible
+#
+
+DomainsFile={{ osb_nodemanager_home }}/nodemanager.domains
+LogLimit=0
+PropertiesVersion={{ ansible_local.weblogic.wls.release }}
+AuthenticationEnabled=true
+NodeManagerHome={{ osb_nodemanager_home }}
+LogLevel=INFO
+DomainsFileEnabled=true
+StartScriptName=startWebLogic.sh
+NativeVersionEnabled=true
+ListenAddress={{ osb_nodemanager_listen_address }}
+ListenPort={{ osb_nodemanager_listen_port }}
+LogToStderr=true
+{% if osb_nodemanager_connection_mode == 'plain' %}
+SecureListener=false
+{% else %}
+SecureListener=true
+{% endif %}
+LogCount=1
+StopScriptEnabled=false
+QuitEnabled=false
+LogAppend=true
+StateCheckInterval=500
+CrashRecoveryEnabled=true
+StartScriptEnabled=true
+LogFile={{ osb_nodemanager_home }}/nodemanager.log
+LogFormatter=weblogic.nodemanager.server.LogFormatter
+ListenBacklog=50

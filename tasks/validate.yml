@@ -1,0 +1,71 @@
+---
+
+#
+# Compatibility verifications
+#
+
+- name: Get local facts
+  setup:
+    filter: "ansible_local"
+  register: result
+
+- name: Check if Oracle Service Bus version is supported
+  fail:
+    msg: "OSB version '{{ osb_version }}' is not valide. Supported version is '12c' !"
+  when: osb_version not in osb.supported_versions
+
+- name: Check if WebLogic and OSB versions are compatibles
+  fail:
+    msg: "OSB version '{{ osb_version }}' is not compatible with WLS version '{{ result.ansible_facts.ansible_local.weblogic.wls.version }}' !"
+  when: result.ansible_facts.ansible_local.weblogic.wls.version != osb_version
+
+#
+# Check ressources existance
+#
+
+- name: Make sure the WebLogic home directory exists
+  stat:
+    path: "{{ middleware_home_dir }}/wlserver"
+  register: wls_home
+  become: yes
+  become_user: "{{ oracle.user }}"
+
+- fail:
+    msg: "The WebLogic home directory didn't exist '{{ middleware_home_dir }}/wlserver' !"
+  when: not wls_home.stat.exists
+
+- name: Check the OSB installation jar file
+  stat:
+    path: "{{ osb_jar_path }}"
+  register: osb_jar
+
+- fail:
+    msg: "The OSB jar is not found !"
+  when: not osb_jar.stat.exists
+
+- name: Check if OSB is already installed
+  stat:
+    path: "{{ middleware_home_dir }}/osb"
+  register: osb_home
+  become: yes
+  become_user: "{{ oracle.user }}"
+
+- debug:
+    msg: "Oracle Service Bus is already installed in '{{ middleware_home_dir }}/osb'"
+  when: osb_home.stat.exists
+
+- set_fact:
+    osb_already_installed: true
+  when: osb_home.stat.exists
+
+#
+# Check oracle database connection params
+#
+
+- fail:
+    msg: 'Please make sure you setup the Database Address and SID parameters !'
+  when: (oracle_db_address|trim == '') or (oracle_db_sid|trim == '')
+
+- fail:
+    msg: 'Oracle DB admin user and OSB schemas passwords are required !'
+  when: (oracle_db_password|trim == '') or (osb_schemas_common_password|trim == '')

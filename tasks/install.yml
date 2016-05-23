@@ -1,0 +1,37 @@
+---
+
+- name: Prepare response file
+  template:
+    src: osb.rsp.j2
+    dest: "{{ osb.install_response_file }}"
+
+- name: Install Oracle Service Bus
+  shell: "java -Xms1024m -Xmx1024m -jar {{ osb_jar_path }} -silent -responseFile {{ osb.install_response_file }} > {{ osb.logs_dir }}/osb_installation_$(date +'%F').log 2>&1"
+
+- name: Create OSB schemas
+  shell: "{{ middleware_home_dir }}/oracle_common/bin/rcu -silent -createRepository -databaseType ORACLE -connectString {{ oracle_db_address }}:{{ oracle_db_port }}:{{ oracle_db_sid }} -dbUser {{ oracle_db_user }} -dbRole {{ oracle_db_role }} -schemaPrefix {{ osb_rcu_schema_prefix }} -useSamePasswordForAllSchemaUsers true -component {{ osb_rcu_components | join(' -component ') }} -f <  {{ oracle.home_dir }}/.rcu_passwords > {{ osb.logs_dir }}/create_osb_schemas_$(date +'%F').log 2>&1"
+
+- name: Create and configure the OSB cluster
+  shell: "{{ osb.scripts_dir }}/osb_create_basic_domain_service.sh > {{ osb.logs_dir }}/create_osb_cluster_$(date +'%F').log 2>&1"
+
+- set_fact:
+    osb_domain_home: "{{ middleware_home_dir }}/user_projects/domains/{{ osb_domain_name }}"
+    osb_nodemanager_home: "{{ middleware_home_dir }}/user_projects/nodemanagers/{{ osb_domain_name }}"
+
+- name: Create AdminServer securtiy directory
+  file:
+    path: "{{ osb_domain_home }}/servers/AdminServer/security"
+    state: directory
+    owner: "{{ oracle.user }}"
+    group: "{{ oracle.group }}"
+
+- name: Copy AdminServer and Nodemanager properties files
+  template:
+    src:  "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ oracle.user }}"
+    group: "{{ oracle.group }}"
+  with_items:
+    - { src: boot.properties.j2, dest: "{{ osb_domain_home }}/servers/AdminServer/security/boot.properties" }
+    - { src: nodemanager.properties.j2, dest: "{{ osb_nodemanager_home }}/nodemanager.properties" }
+    - { src: setUserOverrides.sh.j2, dest: "{{ osb_domain_home }}/bin/setUserOverrides.sh" }

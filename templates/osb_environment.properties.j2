@@ -1,0 +1,40 @@
+#
+# This file is managed by Ansible
+#
+
+#
+# OSB cluster configuration
+#
+oracle_user_name=oracle
+oracle_group_name=oinstall
+domain_name={{ osb_domain_name }}
+cluster_name={{ osb_cluster_name }}
+cluster_nodes={{ osb_cluster_nodes | join(',') }}
+managed_servers_per_machine={{ osb_managed_servers_per_machine }}
+managed_server_listen_port_start={{ osb_managed_server_listen_port_start }}
+managed_server_listen_address={{ osb_managed_server_listen_address }}
+
+#
+# Oracle database connection parameters
+#
+data_source_url=jdbc:oracle:thin:@//{{ oracle_db_address }}:{{ oracle_db_port }}/{{ oracle_db_sid }}
+data_source_user_prefix={{ osb_rcu_schema_prefix }}
+data_source_password={{ oracle_db_password }}
+
+#
+# Node Manager configuration
+#
+nodemanager_listen_address={{ osb_nodemanager_listen_address }}
+nodemanager_username={{ osb_admin_username }}
+nodemanager_password={{ osb_admin_password }}
+nodemanager_listen_port={{ osb_nodemanager_listen_port }}
+nodemanager_connection_mode={{ osb_nodemanager_connection_mode }}
+
+#
+# AdminServer configuration
+#
+admin_server_name={{ osb_admin_server_name }}
+admin_server_listen_address={{ osb_admin_server_listen_address }}
+admin_server_listen_port={{ osb_admin_server_listen_port }}
+admin_username={{ osb_admin_username }}
+admin_password={{ osb_admin_password }}

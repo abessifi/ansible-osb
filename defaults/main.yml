@@ -1,0 +1,66 @@
+---
+#
+# OSB - installation parameters
+#
+middleware_home_dir: '/u01/app/oracle/product/middleware'
+osb_installation_type: 'Service Bus'
+osb_jar_path: ''
+osb_already_installed: false
+osb_version: '12c'
+
+#
+# Oracle DB - connection parameters
+#
+oracle_db_address: ''
+oracle_db_port: '1521'
+oracle_db_sid: ''
+oracle_db_user: 'sys'
+oracle_db_password: ''
+oracle_db_role: 'SYSDBA'
+
+#
+# OSB - Schemas names
+#
+osb_rcu_schema_prefix: 'OSB'
+osb_schemas_common_password: ''
+osb_rcu_components:
+  - MDS
+  - IAU
+  - IAU_APPEND
+  - IAU_VIEWER
+  - OPSS
+  - UCSUMS
+  - WLS
+  - STB
+  - SOAINFRA
+
+#
+# OSB - cluster parameters
+#
+osb_domain_name: 'osb_domain'
+osb_cluster_name: 'osb_cluster'
+osb_cluster_nodes:
+  - "{{ ansible_fqdn }}"
+
+#
+# OSB - nodemanager parameters
+#
+osb_nodemanager_listen_address: 'localhost'
+osb_nodemanager_listen_port: 5556
+osb_nodemanager_connection_mode: 'ssl'
+
+#
+# OSB - AdminServer parameters
+#
+osb_admin_server_name: 'AdminServer'
+osb_admin_server_listen_address: "{{ ansible_fqdn }}"
+osb_admin_server_listen_port: 7001
+osb_admin_username: 'weblogic'
+osb_admin_password: 'manager1'
+
+#
+# OSB - Managed servers parameters
+#
+osb_managed_servers_per_machine: 1
+osb_managed_server_listen_port_start: 8000
+osb_managed_server_listen_address: "{{ ansible_fqdn }}"

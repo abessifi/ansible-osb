@@ -1,0 +1,28 @@
+---
+
+#
+# Oracle user parameters
+#
+oracle:
+  user: oracle
+  group: oinstall
+  home_dir: '/home/oracle'
+
+#
+# OSB parameters
+#
+osb:
+  supported_versions: ['12c']
+  install_response_file: '/tmp/osb.rsp'
+  logs_dir: "{{ oracle.home_dir }}/logs"
+  scripts_dir: "{{ oracle.home_dir }}/scripts"
+
+#
+# Default JVM Heap size for AdminServer, Managed Servers and Coherence
+#
+osb_admin_server_heap_size: '512m'
+osb_admin_server_perm_size: '256m'
+osb_managed_server_heap_size: '1024m'
+osb_managed_server_perm_size: '512m'
+osb_coherence_server_heap_size: '256m'
+osb_coherence_server_perm_size: '128m'

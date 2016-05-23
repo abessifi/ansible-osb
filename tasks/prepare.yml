@@ -1,0 +1,41 @@
+---
+
+- name: Create essential directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ oracle.user }}"
+    group: "{{ oracle.group }}"
+  with_items:
+    - "{{ osb.logs_dir }}"
+    - "{{ osb.scripts_dir }}"
+
+- name: Copy RCU passwords file
+  template:
+    src: rcu_passwords.j2
+    dest: "{{ oracle.home_dir }}/.rcu_passwords"
+
+- name: Copy environments and properties files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ oracle.user }}"
+    group: "{{ oracle.group }}"
+  with_items:
+    - { src: osb_set_environment_variables.sh.j2 , dest: "{{ osb.scripts_dir }}/osb_set_environment_variables.sh" }
+    - { src: osb_environment.properties.j2, dest: "{{ osb.scripts_dir }}/osb_environment.properties" }
+
+- name: Copy WLST scripts
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ oracle.user }}"
+    group: "{{ oracle.group }}"
+    mode: 0750
+  with_items:
+    - { src: osb_create_basic_domain.py, dest: "{{ osb.scripts_dir }}/osb_create_basic_domain.py" }
+    - { src: osb_create_basic_domain_service.sh, dest: "{{ osb.scripts_dir }}/osb_create_basic_domain_service.sh" }
+    - { src: osb_start_admin_server.py, dest: "{{ osb.scripts_dir }}/osb_start_admin_server.py" }
+    - { src: osb_start_admin_server.sh, dest: "{{ osb.scripts_dir }}/osb_start_admin_server.sh" }
+    - { src: osb_start_managed_servers.py, dest: "{{ osb.scripts_dir }}/osb_start_managed_servers.py" }
+    - { src: osb_start_managed_servers.sh, dest: "{{ osb.scripts_dir }}/osb_start_managed_servers.sh" }

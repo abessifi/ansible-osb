@@ -1,0 +1,36 @@
+---
+
+- name: Copy NodeManager systemd script
+  template:
+    src: nodemanager.service.j2
+    dest: /etc/systemd/system/nodemanager.service
+    mode: 0664
+  become: yes
+  become_user: root
+
+- name: Enable and start Nodemanager service
+  service:
+    name: nodemanager
+    enabled: yes
+    state: started
+  become: yes
+  become_user: root
+
+- name: Wait for NodeManager to startup
+  wait_for:
+    port: "{{ osb_nodemanager_listen_port }}"
+    delay: 2
+    timeout: 30
+
+- name: Start AdminServer
+  shell: "{{ osb.scripts_dir }}/osb_start_admin_server.sh > {{ osb.logs_dir }}/start_admin_server_$(date +'%F').log 2>&1"
+
+- name: Wait for AdminServer to startup
+  wait_for:
+    port: "{{ osb_nodemanager_listen_port }}"
+    delay: 4
+    timeout: 30
+
+- name: Start Managed Server
+  shell: "{{ osb.scripts_dir }}/osb_start_managed_servers.sh > {{ osb.logs_dir }}/start_managed_servers_$(date +'%F').log 2>&1"
+

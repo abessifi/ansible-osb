@@ -1,0 +1,37 @@
+#!/bin/sh
+
+ADMIN_SERVER_HEAP_SIZE={{ osb_admin_server_heap_size }}
+ADMIN_SERVER_PERM_SIZE={{ osb_admin_server_perm_size }}
+MANAGED_SERVER_HEAP_SIZE={{ osb_managed_server_heap_size }}
+MANAGED_SERVER_PERM_SIZE={{ osb_managed_server_perm_size }}
+COHERENCE_SERVER_HEAP_SIZE={{ osb_coherence_server_heap_size }}
+COHERENCE_SERVER_PERM_SIZE={{ osb_coherence_server_perm_size }}
+
+JAVA_OPTIONS="${JAVA_OPTIONS} -Djava.security.egd=file:///dev/urandom"
+
+ADMIN_SERVER_MEM_ARGS="-Xms${ADMIN_SERVER_HEAP_SIZE} -Xmx${ADMIN_SERVER_HEAP_SIZE} -XX:PermSize=${ADMIN_SERVER_PERM_SIZE} -XX:MaxPermSize=${ADMIN_SERVER_PERM_SIZE}"
+SERVER_MEM_ARGS="-Xms${MANAGED_SERVER_HEAP_SIZE} -Xmx${MANAGED_SERVER_HEAP_SIZE} -XX:PermSize=${MANAGED_SERVER_PERM_SIZE} -XX:MaxPermSize=${MANAGED_SERVER_PERM_SIZE}"
+COHERENCE_SERVER_MEM_ARGS="-Xms${COHERENCE_SERVER_HEAP_SIZE} -Xmx${COHERENCE_SERVER_HEAP_SIZE} -XX:PermSize=${COHERENCE_SERVER_PERM_SIZE} -XX:MaxPermSize=${COHERENCE_SERVER_PERM_SIZE}"
+MONITORING_ARGS="-XX:+UnlockCommercialFeatures -XX:+FlightRecorder"
+COHERENCE_MONITORING_ARGS="-Dtangosol.coherence.management=all -Dtangosol.coherence.management.remote=true"
+GARBAGE_COLLECTOR_ARGS="-XX:NewRatio=3 -XX:SurvivorRatio=128 -XX:MaxTenuringThreshold=0 -XX:+UseParallelGC -XX:MaxGCPauseMillis=200 -XX:GCTimeRatio=19 -XX:+UseParallelOldGC -XX:+UseTLAB"
+LARGE_PAGES_ARGS="-XX:LargePageSizeInBytes=2048k -XX:+UseLargePages"
+
+if [ "${ADMIN_URL}" = "" ] ; then
+	USER_MEM_ARGS="${ADMIN_SERVER_MEM_ARGS} ${GARBAGE_COLLECTOR_ARGS}"
+else
+	case ${SERVER_NAME} in
+		server_*)
+			USER_MEM_ARGS="${SERVER_MEM_ARGS} ${GARBAGE_COLLECTOR_ARGS} ${MONITORING_ARGS}"
+		;;
+		coherence_server_1)
+			USER_MEM_ARGS="${COHERENCE_SERVER_MEM_ARGS} ${GARBAGE_COLLECTOR_ARGS} ${MONITORING_ARGS} ${COHERENCE_MONITORING_ARGS}"
+		;;
+		coherence_server_*)
+			USER_MEM_ARGS="${COHERENCE_SERVER_MEM_ARGS} ${GARBAGE_COLLECTOR_ARGS} ${MONITORING_ARGS}"
+		;;
+	esac
+fi
+
+export USER_MEM_ARGS
+export JAVA_OPTIONS

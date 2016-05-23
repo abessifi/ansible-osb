@@ -1,0 +1,53 @@
+#
+# This file is managed by Ansible
+#
+
+# The scripts create files that are placed in this directory
+TEMPORARY_DIRECTORY="/home/oracle/tmp"
+export TEMPORARY_DIRECTORY
+
+# Base directory
+BASE_DIRECTORY="/u01/app/oracle"
+export BASE_DIRECTORY
+
+# Directory that will used for the installation and configuration
+RUNTIME_HOME="${BASE_DIRECTORY}/product"
+export RUNTIME_HOME
+
+# Directory that will be used as the middleware home (holds software binaries)
+MIDDLEWARE_HOME="${RUNTIME_HOME}/middleware"
+export MIDDLEWARE_HOME
+
+# Location of the Oracle inventory
+ORACLE_INVENTORY_HOME="${BASE_DIRECTORY}/inventory"
+export ORACLE_INVENTORY_HOME
+
+# Name of the domain
+DOMAIN_NAME="{{ osb_domain_name }}"
+export DOMAIN_NAME
+
+# Directory where the configuration will be placed
+CONFIGURATION_HOME="${MIDDLEWARE_HOME}/user_projects"
+export CONFIGURATION_HOME
+
+# Domain home (directory that contains the domain configuration files)
+DOMAIN_CONFIGURATION_HOME="${CONFIGURATION_HOME}/domains/${DOMAIN_NAME}"
+export DOMAIN_CONFIGURATION_HOME
+
+# Domain application home (directory in which application related artifacts are placed)
+DOMAIN_APPLICATION_HOME="${CONFIGURATION_HOME}/applications/${DOMAIN_NAME}"
+export DOMAIN_APPLICATION_HOME
+
+# Node manager home (directory that contains the node manager configuration files)
+NODE_MANAGER_HOME="${CONFIGURATION_HOME}/nodemanagers/${DOMAIN_NAME}"
+export NODE_MANAGER_HOME
+
+# Default homes that are created when the software is installed
+COHERENCE_HOME="${MIDDLEWARE_HOME}/coherence"
+export COHERENCE_HOME
+FUSION_MIDDLEWARE_HOME="${MIDDLEWARE_HOME}/oracle_common"
+export FUSION_MIDDLEWARE_HOME
+OSB_HOME="${MIDDLEWARE_HOME}/osb"
+export OSB_HOME
+WEBLOGIC_HOME="${MIDDLEWARE_HOME}/wlserver"
+export WEBLOGIC_HOME
