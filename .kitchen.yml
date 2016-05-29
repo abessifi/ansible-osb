@@ -31,4 +31,4 @@ suites:
       tags:
         - install-java
         - wls-plain-install
-        - osb-plain-install
+        - osb-install-and-startup

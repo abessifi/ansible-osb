@@ -3,14 +3,16 @@
 - include: validate.yml
   tags:
     - osb-plain-install
+    - osb-install-and-startup
 
 - include: prepare.yml
   become: yes
   become_user: "{{ oracle.user }}"
   when: not osb_already_installed
   tags:
-    - osb-plain-install
     - osb-purge-db-schemas
+    - osb-plain-install
+    - osb-install-and-startup
 
 - name: Purge OSB schemas
   shell: "{{ middleware_home_dir }}/oracle_common/bin/rcu -silent -dropRepository -databaseType ORACLE -connectString {{ oracle_db_address }}:{{ oracle_db_port }}:{{ oracle_db_sid }} -dbUser {{ oracle_db_user }} -dbRole {{ oracle_db_role }} -schemaPrefix {{ osb_rcu_schema_prefix }} -component {{ osb_rcu_components | join(' -component ') }} -f <  {{ oracle.home_dir }}/.rcu_passwords > {{ osb.logs_dir }}/purge_osb_schemas_$(date +'%F').log 2>&1"
@@ -25,11 +27,12 @@
   when: not osb_already_installed
   tags:
     - osb-plain-install
+    - osb-install-and-startup
 
 - include: service.yml
   become: yes
   become_user: "{{ oracle.user }}"
   when: not osb_already_installed
   tags:
-    - osb-plain-install
+    - osb-install-and-startup
 
