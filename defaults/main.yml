@@ -1,28 +1,29 @@
 ---
+
 #
 # OSB - installation parameters
 #
-middleware_home_dir: '/u01/app/oracle/product/middleware'
+oracle_base_dir: '/u01/app/oracle'
+middleware_home_dir: "{{ oracle_base_dir }}/product/middleware"
 osb_installation_type: 'Service Bus'
 osb_jar_path: ''
-osb_already_installed: false
 osb_version: '12c'
 
 #
 # Oracle DB - connection parameters
 #
-oracle_db_address: ''
+oracle_db_address: 'localhost'
 oracle_db_port: '1521'
-oracle_db_sid: ''
+oracle_db_sid: 'xe'
 oracle_db_user: 'sys'
-oracle_db_password: ''
+oracle_db_password: 'oracle'
 oracle_db_role: 'SYSDBA'
 
 #
 # OSB - Schemas names
 #
 osb_rcu_schema_prefix: 'OSB'
-osb_schemas_common_password: ''
+osb_schemas_common_password: 'oracle'
 osb_rcu_components:
   - MDS
   - IAU
@@ -38,6 +39,7 @@ osb_rcu_components:
 # OSB - cluster parameters
 #
 osb_domain_name: 'osb_domain'
+osb_domain_home: "{{ middleware_home_dir }}/user_projects/domains/{{ osb_domain_name }}"
 osb_cluster_name: 'osb_cluster'
 osb_cluster_nodes:
   - "{{ ansible_fqdn }}"
@@ -45,6 +47,7 @@ osb_cluster_nodes:
 #
 # OSB - nodemanager parameters
 #
+osb_nodemanager_home: "{{ middleware_home_dir }}/user_projects/nodemanagers/{{ osb_domain_name }}"
 osb_nodemanager_listen_address: 'localhost'
 osb_nodemanager_listen_port: 5556
 osb_nodemanager_connection_mode: 'ssl'

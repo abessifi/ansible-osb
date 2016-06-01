@@ -24,6 +24,5 @@
       oracle_db_sid: 'xe.oracle.docker'
       oracle_db_password: 'oracle'
       osb_schemas_common_password: 'oracle'
-      osb_domain_name: 'osb_domain'
       osb_admin_server_listen_address: 'osb.weblogic.local'
       osb_managed_server_listen_address: 'osb.weblogic.local'

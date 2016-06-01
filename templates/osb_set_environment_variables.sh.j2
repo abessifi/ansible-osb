@@ -7,7 +7,7 @@ TEMPORARY_DIRECTORY="/home/oracle/tmp"
 export TEMPORARY_DIRECTORY
 
 # Base directory
-BASE_DIRECTORY="/u01/app/oracle"
+BASE_DIRECTORY="{{ oracle_base_dir }}"
 export BASE_DIRECTORY
 
 # Directory that will used for the installation and configuration
@@ -15,7 +15,7 @@ RUNTIME_HOME="${BASE_DIRECTORY}/product"
 export RUNTIME_HOME
 
 # Directory that will be used as the middleware home (holds software binaries)
-MIDDLEWARE_HOME="${RUNTIME_HOME}/middleware"
+MIDDLEWARE_HOME="{{ middleware_home_dir }}"
 export MIDDLEWARE_HOME
 
 # Location of the Oracle inventory

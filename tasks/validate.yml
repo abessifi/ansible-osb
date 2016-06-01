@@ -34,15 +34,6 @@
     msg: "The WebLogic home directory didn't exist '{{ middleware_home_dir }}/wlserver' !"
   when: not wls_home.stat.exists
 
-- name: Check the OSB installation jar file
-  stat:
-    path: "{{ osb_jar_path }}"
-  register: osb_jar
-
-- fail:
-    msg: "The OSB jar is not found !"
-  when: not osb_jar.stat.exists
-
 - name: Check if OSB is already installed
   stat:
     path: "{{ middleware_home_dir }}/osb"
@@ -58,14 +49,27 @@
     osb_already_installed: true
   when: osb_home.stat.exists
 
-#
-# Check oracle database connection params
-#
+- name: Check the OSB installation JAR file
+  stat:
+    path: "{{ osb_jar_path }}"
+  register: osb_jar
+  when: not osb_already_installed
 
 - fail:
-    msg: 'Please make sure you setup the Database Address and SID parameters !'
-  when: (oracle_db_address|trim == '') or (oracle_db_sid|trim == '')
+    msg: "The OSB installer JAR file is not found !"
+  when: not osb_already_installed and not osb_jar.stat.exists
 
-- fail:
-    msg: 'Oracle DB admin user and OSB schemas passwords are required !'
-  when: (oracle_db_password|trim == '') or (osb_schemas_common_password|trim == '')
+- name: Check if OSB is already configured
+  stat:
+    path: "{{ osb_domain_home }}/config/config.xml"
+  register: domain_home
+  become: yes
+  become_user: "{{ oracle.user }}"
+
+- debug:
+    msg: "Oracle Service Bus is configured ! The config file '{{ osb_domain_home }}/config/config.xml' exists already !"
+  when: domain_home.stat.exists
+
+- set_fact:
+    osb_already_configured: true
+  when: domain_home.stat.exists

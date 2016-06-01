@@ -19,7 +19,7 @@
 - name: Wait for NodeManager to startup
   wait_for:
     port: "{{ osb_nodemanager_listen_port }}"
-    delay: 2
+    delay: 4
     timeout: 30
 
 - name: Start AdminServer

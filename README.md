@@ -43,26 +43,28 @@ In case of a plain installation using this Ansible role such as a combination of
 
 #### OSB installation parameters
 
+- **`oracle_base_dir`** - The Oracle base directory (default: `/u01/app/oracle`)
 - **`middleware_home_dir`** - The Oracle Middleware installation directory (default: `/u01/app/oracle/product/middleware`)
 - **`osb_installation_type`** - The Oracle Service Bus installation type (default: `'Service Bus'`)
 - **`osb_jar_path`** - Required absolute path to the OSB installer JAR file (default: `''`)
-- **`osb_already_installed`** - A Flag to indicate if OSB is already installed (default: `false`)
 - **`osb_version`** - The OSB version to install (default: `12c`)
+- **`osb_already_installed`** - A Flag to indicate if OSB is already installed (default: `false`)
+- **`osb_init_services`** - Initialize WebLogic services by running the Nodemanager, the AdminServer and the Managed Server (default: `false`)
 
 #### Oracle database connection parameters
 
-- **`oracle_db_address`** - A required Oracle database address (default: `''`)
+- **`oracle_db_address`** - A required Oracle database address (default: `localhost`)
 - **`oracle_db_port`** - The Oracle database connection port (default: `1521`)
-- **`oracle_db_sid`** - A required Oracle database connection system identifier (default: `''`)
+- **`oracle_db_sid`** - A required Oracle database connection system identifier (default: `xe`)
 - **`oracle_db_user`** - The Oracle database admin user name (default: `sys`)
-- **`oracle_db_password`** - A required Oracle database admin user password (default: `''`)
+- **`oracle_db_password`** - A required Oracle database admin user password (default: `oracle`)
 - **`oracle_db_role`** - The Oracle database admin user role (default: `SYSDBA`)
 
 #### OSB database schemas
 
 - **`osb_rcu_components`** - The OSB schemas components to install (default: `[ MDS, IAU, IAU_APPEND, IAU_VIEWER, OPSS, UCSUMS, WLS, STB, SOAINFRA ]`)
 - **`osb_rcu_schema_prefix`** - The OSB database schemas prefix (default: `OSB`)
-- **`osb_schemas_common_password`** - Required OSB schemas common password (default: `''`)
+- **`osb_schemas_common_password`** - Required OSB schemas common password (default: `oracle`)
 
 #### Cluster paramerters
 
@@ -101,8 +103,11 @@ In case of a plain installation using this Ansible role such as a combination of
 
 ## Available tags
 
+- **`osb-create-db-schemas`** - Specify this tag to create the OSB schemas using RCU.
 - **`osb-purge-db-schemas`** - Use this tag if you want to purge an existing OSB schemas to prepare for a clean installation. The role parameters such as for db connection, the schemas prefix and the RCU components are required.
-- **`osb-plain-install`** - This is the default installation mode of the OSB. When mentionned, this flag perfoms the creation of a new domain and the configuration of an OSB cluster with 3 services: a nodemanager, an AdminServer and one Manager Server.
+- **`osb-plain-install`** - This tag performs only the installation of the OSB software.
+- **`osb-configure`** - When mentionned, the OSB configuration tasks are executed (Create OSB cluster, etc).
+- **`osb-install-and-init`** - This is the default installation mode of the OSB. When mentionned, this tag perfoms the creation of a new domain, the configuration and startup of an OSB cluster with 3 services: a nodemanager, an AdminServer and one Manager Server.
 
 # Usage
 
