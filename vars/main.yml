@@ -12,6 +12,7 @@ oracle:
 # OSB parameters
 #
 osb_already_installed: false
+osb_schemas_created: false
 osb_already_configured: false
 osb_init_services: false
 

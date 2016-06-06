@@ -11,10 +11,6 @@
   tags:
     - always
 
-- include: rcu.yml
-  become: yes
-  become_user: "{{ oracle.user }}"
-
 - include: install.yml
   become: yes
   become_user: "{{ oracle.user }}"
@@ -22,6 +18,10 @@
   tags:
     - osb-plain-install
     - osb-install-and-init
+
+- include: rcu.yml
+  become: yes
+  become_user: "{{ oracle.user }}"
 
 - include: configure.yml
   become: yes
@@ -38,3 +38,9 @@
   tags:
     - osb-install-and-init
 
+- name: Add custom facts for OSB
+  template:
+    src: osb.fact.j2
+    dest: /etc/ansible/facts.d/osb.fact
+  tags:
+    - always

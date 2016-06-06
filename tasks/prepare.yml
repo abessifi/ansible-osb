@@ -1,5 +1,12 @@
 ---
 
+- name: Create Ansible local facts directory
+  file:
+    path: /etc/ansible/facts.d
+    state: directory
+  become: yes
+  become_user: root
+
 - name: Create essential directories
   file:
     path: "{{ item }}"
@@ -44,4 +51,3 @@
   template:
     src: osb.rsp.j2
     dest: "{{ osb.install_response_file }}"
-

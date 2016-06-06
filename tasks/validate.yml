@@ -73,3 +73,10 @@
 - set_fact:
     osb_already_configured: true
   when: domain_home.stat.exists
+
+#
+# Check if OSB schemas were created
+#
+- set_fact:
+    osb_schemas_created: true
+  when: (ansible_local.osb.db is defined) and (ansible_local.osb.db.created|bool)

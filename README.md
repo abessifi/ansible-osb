@@ -50,6 +50,7 @@ In case of a plain installation using this Ansible role such as a combination of
 - **`osb_version`** - The OSB version to install (default: `12c`)
 - **`osb_already_installed`** - A Flag to indicate if OSB is already installed (default: `false`)
 - **`osb_init_services`** - Initialize WebLogic services by running the Nodemanager, the AdminServer and the Managed Server (default: `false`)
+- **`osb_schemas_created`** - A Flag to tell if the OSB schemas are installed or not (default: `false`)
 
 #### Oracle database connection parameters
 
@@ -104,10 +105,14 @@ In case of a plain installation using this Ansible role such as a combination of
 ## Available tags
 
 - **`osb-create-db-schemas`** - Specify this tag to create the OSB schemas using RCU.
-- **`osb-purge-db-schemas`** - Use this tag if you want to purge an existing OSB schemas to prepare for a clean installation. The role parameters such as for db connection, the schemas prefix and the RCU components are required.
+- **`osb-purge-db-schemas`** - Use this tag if you want to purge an existing OSB schemas to prepare for a clean installation. If you want that the purge take effect, you have to set the role parameter `osb_schemas_created` to `true`. The role parameters for db connection, the schemas prefix and the RCU components are required too.
 - **`osb-plain-install`** - This tag performs only the installation of the OSB software.
 - **`osb-configure`** - When mentionned, the OSB configuration tasks are executed (Create OSB cluster, etc).
 - **`osb-install-and-init`** - This is the default installation mode of the OSB. When mentionned, this tag perfoms the creation of a new domain, the configuration and startup of an OSB cluster with 3 services: a nodemanager, an AdminServer and one Manager Server.
+
+## Local facts
+
+- **`osb.db.created`** - Tell if the OSB schemas are installed or not
 
 # Usage
 
@@ -186,7 +191,7 @@ That's all ! It's now time to call Ansible to provision your server. Here is an 
 
 ### Purge existing OSB schemas
 
-If you want to purge an existing OSB schemas and start a clean installation, use the Ansible tags `osb-purge-db-schemas` to remove the schemas from the Oracle database before recreating them during installation process:
+If you want to purge an existing OSB schemas and start a clean installation, use the Ansible tags `osb-purge-db-schemas` and set the role paramerter `osb_schemas_created` to remove the schemas from the Oracle database before recreating them during installation process:
 
 	$ ansible-playbook --user=<user-name> --connection=ssh --timeout=30 --inventory-file=inventory.ini --tags='install-java,wls-plain-install,osb-purge-db-schemas,osb-plain-install' -v provision.yml
 

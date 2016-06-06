@@ -1,11 +1,35 @@
 ---
 
+#
+# Drop OSB schemas tasks
+#
+
 - name: Purge OSB schemas
   shell: "{{ middleware_home_dir }}/oracle_common/bin/rcu -silent -dropRepository -databaseType ORACLE -connectString {{ oracle_db_address }}:{{ oracle_db_port }}:{{ oracle_db_sid }} -dbUser {{ oracle_db_user }} -dbRole {{ oracle_db_role }} -schemaPrefix {{ osb_rcu_schema_prefix }} -component {{ osb_rcu_components | join(' -component ') }} -f <  {{ oracle.home_dir }}/.rcu_passwords > {{ osb.logs_dir }}/purge_osb_schemas_$(date +'%F').log 2>&1"
+  register: rcu_drop_cmd
+  when: osb_schemas_created
   tags:
     - osb-purge-db-schemas
 
+- set_fact:
+    osb_schemas_created: false
+  when: (rcu_drop_cmd is defined) and (not rcu_drop_cmd.rc)
+  tags:
+    - osb-purge-db-schemas
+
+#
+# Create OSB schemas tasks
+#
+
 - name: Create OSB schemas
   shell: "{{ middleware_home_dir }}/oracle_common/bin/rcu -silent -createRepository -databaseType ORACLE -connectString {{ oracle_db_address }}:{{ oracle_db_port }}:{{ oracle_db_sid }} -dbUser {{ oracle_db_user }} -dbRole {{ oracle_db_role }} -schemaPrefix {{ osb_rcu_schema_prefix }} -useSamePasswordForAllSchemaUsers true -component {{ osb_rcu_components | join(' -component ') }} -f <  {{ oracle.home_dir }}/.rcu_passwords > {{ osb.logs_dir }}/create_osb_schemas_$(date +'%F').log 2>&1"
+  register: rcu_create_cmd
+  when: not osb_schemas_created
+  tags:
+    - osb-create-db-schemas
+
+- set_fact:
+    osb_schemas_created: true
+  when: (rcu_create_cmd is defined) and (not rcu_create_cmd.rc)
   tags:
     - osb-create-db-schemas
