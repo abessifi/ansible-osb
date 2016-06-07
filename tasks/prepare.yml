@@ -22,16 +22,6 @@
     src: rcu_passwords.j2
     dest: "{{ oracle.home_dir }}/.rcu_passwords"
 
-- name: Copy environments and properties files
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: "{{ oracle.user }}"
-    group: "{{ oracle.group }}"
-  with_items:
-    - { src: osb_set_environment_variables.sh.j2 , dest: "{{ osb.scripts_dir }}/osb_set_environment_variables.sh" }
-    - { src: osb_environment.properties.j2, dest: "{{ osb.scripts_dir }}/osb_environment.properties" }
-
 - name: Copy WLST scripts
   copy:
     src: "{{ item.src }}"
