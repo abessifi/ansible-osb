@@ -37,7 +37,7 @@ for server_lifecycle in server_lifecycles:
         print '[INFO] Server %s is in %s state and will not be started' % \
                 (server_lifecycle.getName(), server_lifecycle.getState());
 
-print '[INFO] Disconnectiong from AdminServer..';
+print '[INFO] Disconnecting from AdminServer..';
 disconnect();
 
 print '[INFO] Done !'
