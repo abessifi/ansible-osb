@@ -36,6 +36,7 @@
     - { src: osb_start_admin_server.sh, dest: "{{ osb.scripts_dir }}/osb_start_admin_server.sh" }
     - { src: osb_start_managed_servers.py, dest: "{{ osb.scripts_dir }}/osb_start_managed_servers.py" }
     - { src: osb_start_managed_servers.sh, dest: "{{ osb.scripts_dir }}/osb_start_managed_servers.sh" }
+    - { src: osb_start_nodemanager.sh, dest: "{{ osb.scripts_dir }}/osb_start_nodemanager.sh" }
 
 - name: Prepare OSB installation response file
   template:
