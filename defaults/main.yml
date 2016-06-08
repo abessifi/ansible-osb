@@ -42,7 +42,7 @@ osb_domain_name: 'osb_domain'
 osb_domain_home: "{{ middleware_home_dir }}/user_projects/domains/{{ osb_domain_name }}"
 osb_cluster_name: 'osb_cluster'
 osb_cluster_nodes:
-  - "{{ ansible_fqdn }}"
+  - "localhost"
 
 #
 # OSB - nodemanager parameters
@@ -56,7 +56,7 @@ osb_nodemanager_connection_mode: 'ssl'
 # OSB - AdminServer parameters
 #
 osb_admin_server_name: 'AdminServer'
-osb_admin_server_listen_address: "{{ ansible_fqdn }}"
+osb_admin_server_listen_address: "localhost"
 osb_admin_server_listen_port: 7001
 osb_admin_username: 'weblogic'
 osb_admin_password: 'manager1'
@@ -66,4 +66,4 @@ osb_admin_password: 'manager1'
 #
 osb_managed_servers_per_machine: 1
 osb_managed_server_listen_port_start: 8000
-osb_managed_server_listen_address: "{{ ansible_fqdn }}"
+osb_managed_server_listen_address: "localhost"
