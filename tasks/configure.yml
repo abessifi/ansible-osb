@@ -38,3 +38,24 @@
     - { src: boot.properties.j2, dest: "{{ osb_domain_home }}/servers/AdminServer/security/boot.properties" }
     - { src: nodemanager.properties.j2, dest: "{{ osb_nodemanager_home }}/nodemanager.properties" }
     - { src: setUserOverrides.sh.j2, dest: "{{ osb_domain_home }}/bin/setUserOverrides.sh" }
+
+#
+# Configure the Nodemanager as a systemd service
+#
+
+- name: Copy NodeManager systemd script
+  template:
+    src: nodemanager.service.j2
+    dest: /etc/systemd/system/nodemanager.service
+    mode: 0664
+  when: ansible_virtualization_type != 'docker'
+  become: yes
+  become_user: root
+
+- name: Enable Nodemanager service
+  service:
+    name: nodemanager
+    enabled: yes
+  when: ansible_virtualization_type != 'docker'
+  become: yes
+  become_user: root

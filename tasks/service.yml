@@ -1,36 +1,76 @@
 ---
 
-- name: Copy NodeManager systemd script
-  template:
-    src: nodemanager.service.j2
-    dest: /etc/systemd/system/nodemanager.service
-    mode: 0664
-  become: yes
-  become_user: root
+#
+# Manage Nodemanager service
+#
 
-- name: Enable and start Nodemanager service
+- name: Start Nodemanager service
   service:
     name: nodemanager
-    enabled: yes
     state: started
   become: yes
   become_user: root
+  tags:
+    - osb-start-nodemanager
+    - osb-install-and-init
+
+- name: Stop Nodemanager service
+  service:
+    name: nodemanager
+    state: stopped
+  become: yes
+  become_user: root
+  tags:
+    - osb-stop-nodemanager
+
+- name: Restart Nodemanager service
+  service:
+    name: nodemanager
+    state: restarted
+  become: yes
+  become_user: root
+  tags:
+    - osb-restart-nodemanager
 
 - name: Wait for NodeManager to startup
   wait_for:
     port: "{{ osb_nodemanager_listen_port }}"
     delay: 4
     timeout: 30
+  tags:
+    - osb-start-nodemanager
+    - osb-restart-nodemanager
+    - osb-install-and-init
+
+#
+# Manager AdminServer process
+#
 
 - name: Start AdminServer
-  shell: "{{ osb.scripts_dir }}/osb_start_admin_server.sh > {{ osb.logs_dir }}/start_admin_server_$(date +'%F').log 2>&1"
+  shell: "{{ osb.scripts_dir }}/osb_control_admin_server.sh start >> {{ osb.logs_dir }}/control_admin_server_$(date +'%F').log 2>&1"
+  tags:
+    - osb-start-adminserver
+    - osb-install-and-init
+
+- name: Stop AdminServer
+  shell: "{{ osb.scripts_dir }}/osb_control_admin_server.sh stop >> {{ osb.logs_dir }}/control_admin_server_$(date +'%F').log 2>&1"
+  tags:
+    - osb-stop-adminserver
 
 - name: Wait for AdminServer to startup
   wait_for:
     port: "{{ osb_nodemanager_listen_port }}"
     delay: 4
     timeout: 30
+  tags:
+    - osb-start-adminserver
+    - osb-install-and-init
+
+#
+# Manager ManagedServer process
+#
 
 - name: Start Managed Server
   shell: "{{ osb.scripts_dir }}/osb_start_managed_servers.sh > {{ osb.logs_dir }}/start_managed_servers_$(date +'%F').log 2>&1"
-
+  tags:
+    - osb-install-and-init

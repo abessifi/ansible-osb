@@ -32,8 +32,8 @@
   with_items:
     - { src: osb_create_basic_domain.py, dest: "{{ osb.scripts_dir }}/osb_create_basic_domain.py" }
     - { src: osb_create_basic_domain_service.sh, dest: "{{ osb.scripts_dir }}/osb_create_basic_domain_service.sh" }
-    - { src: osb_start_admin_server.py, dest: "{{ osb.scripts_dir }}/osb_start_admin_server.py" }
-    - { src: osb_start_admin_server.sh, dest: "{{ osb.scripts_dir }}/osb_start_admin_server.sh" }
+    - { src: osb_control_admin_server.py, dest: "{{ osb.scripts_dir }}/osb_control_admin_server.py" }
+    - { src: osb_control_admin_server.sh, dest: "{{ osb.scripts_dir }}/osb_control_admin_server.sh" }
     - { src: osb_start_managed_servers.py, dest: "{{ osb.scripts_dir }}/osb_start_managed_servers.py" }
     - { src: osb_start_managed_servers.sh, dest: "{{ osb.scripts_dir }}/osb_start_managed_servers.sh" }
     - { src: osb_start_nodemanager.sh, dest: "{{ osb.scripts_dir }}/osb_start_nodemanager.sh" }

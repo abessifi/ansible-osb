@@ -34,9 +34,6 @@
 - include: service.yml
   become: yes
   become_user: "{{ oracle.user }}"
-  when: not osb_already_configured or osb_init_services
-  tags:
-    - osb-install-and-init
 
 - name: Add custom facts for OSB
   template:
