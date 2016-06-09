@@ -11,6 +11,4 @@ export PATH=${DOMAIN_CONFIGURATION_HOME}/bin/:$PATH
 # Check if the Nodemanager is running and start it if not.
 if [ ! -f ${NODE_MANAGER_HOME}/nodemanager.process.lck ]; then
     startNodeManager.sh
-else
-  echo "[INFO] The Nodemanager is already running."
 fi
