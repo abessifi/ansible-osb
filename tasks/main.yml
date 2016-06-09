@@ -7,7 +7,6 @@
 - include: prepare.yml
   become: yes
   become_user: "{{ oracle.user }}"
-  when: not osb_already_installed or not osb_already_configured
   tags:
     - always
 
