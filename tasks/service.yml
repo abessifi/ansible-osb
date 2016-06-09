@@ -74,16 +74,16 @@
 # Manager ManagedServer process
 #
 
-- name: Start Managed Server
+- name: Start Managed Servers
   shell: "{{ osb.scripts_dir }}/osb_control_managed_servers.sh start >> {{ osb.logs_dir }}/control_managed_servers_$(date +'%F').log 2>&1"
   tags:
-    - osb-start-managed-server
+    - osb-start-managed-servers
     - osb-install-and-init
 
-- name: Stop Managed Server
+- name: Stop Managed Servers
   shell: "{{ osb.scripts_dir }}/osb_control_managed_servers.sh stop >> {{ osb.logs_dir }}/control_managed_servers_$(date +'%F').log 2>&1"
   tags:
-    - osb-stop-managed-server
+    - osb-stop-managed-servers
 
 - name: Wait for Managed Server to startup
   wait_for:
@@ -93,5 +93,5 @@
     timeout: 30
   ignore_errors: true
   tags:
-    - osb-start-managed-server
+    - osb-start-managed-servers
     - osb-install-and-init
