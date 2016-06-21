@@ -262,7 +262,7 @@ For quick tests, you can spin-up a CentOS VM using Vagrant. You maybe need to ad
 ```
 - Install all stuff !
 ```
-	(host)$ vargant provision
+	(host)$ vagrant provision
 ```
 
 ## Run acceptance tests

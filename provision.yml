@@ -3,7 +3,6 @@
 - hosts: ansible-vm
   roles:
     - role: abessifi.java
-      sudo: yes
       java_version: 8
       java_jdk_type: 'oracle'
       oracle_jdk_rpm_package: 'jdk-8u77-linux-x64.rpm'
@@ -21,7 +20,5 @@
       oracle_db_address: 'db.weblogic.local'
       oracle_db_sid: 'xe.oracle.docker'
       oracle_db_password: 'oracle'
-      osb_schemas_common_password: 'oracle'
-      osb_domain_name: 'osb_domain'
       osb_admin_server_listen_address: 'osb.weblogic.local'
       osb_managed_server_listen_address: 'osb.weblogic.local'

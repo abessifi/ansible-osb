@@ -21,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.playbook = 'provision.yml'
       ansible.inventory_path = 'vagrant-inventory.ini'
       ansible.limit = 'ansible-vm'
-      ansible.tags = 'install-java,wls-plain-install,osb-plain-install'
+      ansible.tags = 'install-java,wls-plain-install,osb-create-db-schemas,osb-install-and-init'
       ansible.verbose = 'v'
     end
   end

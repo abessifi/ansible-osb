@@ -38,5 +38,7 @@
   template:
     src: osb.fact.j2
     dest: /etc/ansible/facts.d/osb.fact
+  become: yes
+  become_user: root
   tags:
     - always
