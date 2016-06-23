@@ -72,7 +72,7 @@
     port: "{{ osb_admin_server_listen_port }}"
     host: "{{ osb_admin_server_listen_address }}"
     delay: 8
-    timeout: 20
+    timeout: 30
   ignore_errors: true
   tags:
     - osb-start-adminserver
@@ -89,7 +89,7 @@
     port: "{{ osb_managed_server_listen_port_start }}"
     host: "{{ osb_managed_server_listen_address }}"
     delay: 8
-    timeout: 20
+    timeout: 30
   ignore_errors: true
   tags:
     - osb-start-managed-servers
