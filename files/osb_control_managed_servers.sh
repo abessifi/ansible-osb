@@ -13,7 +13,7 @@ usage(){
 
 control_managed_servers() {
 	${FUSION_MIDDLEWARE_HOME}/common/bin/wlst.sh \
-		-loadProperties ${SCRIPT_PATH}/osb_environment.properties \
+		-loadProperties ${SCRIPT_PATH}/../config/osb_environment.properties \
 		${SCRIPT_PATH}/osb_control_managed_servers.py $CONTROL_ACTION
 }
 

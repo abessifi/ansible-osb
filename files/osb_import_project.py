@@ -13,9 +13,6 @@ domain_configuration_home = os.getenv('DOMAIN_CONFIGURATION_HOME')
 admin_server_url = 't3://' + admin_server_listen_address + ':' + admin_server_listen_port
 admin_server_config_file = domain_configuration_home + '/admin_server_config_file.properties'
 admin_server_key_file = domain_configuration_home + '/admin_server_key_file.properties'
-sbconfig_file = '/tmp/sbconfig.jar'
-osb_customization_file = '/tmp/ALSBCustomizationFile.xml'
-sb_project = 'Cabestan'
 
 def readBinaryFile(fileName):
     file = open(fileName, 'rb')
@@ -40,13 +37,13 @@ def printDiagMap(map):
 
 def importSBConfigFile(config_mbean):
 
-    print "[DEBUG] Read SBConfig file '%s'", sbconfig_file
-    theBytes = readBinaryFile(sbconfig_file)
+    print "[DEBUG] Read SBConfig file '%s'", sbconfig_jar_file
+    theBytes = readBinaryFile(sbconfig_jar_file)
     print "[INFO] Loading SBConfig JAR file"
     config_mbean.uploadJarFile(theBytes)
     print "[INFO] SBConfig JAR loaded"
 
-    if sb_project == None:
+    if not sbconfig_project:
         print "[WARN] No project specified, additive deployment performed"
         alsbJarInfo = config_mbean.getImportJarInfo()
         alsbImportPlan = alsbJarInfo.getDefaultImportPlan()
@@ -54,7 +51,7 @@ def importSBConfigFile(config_mbean):
         alsbImportPlan.setPreserveExistingEnvValues(true)
         importResult = config_mbean.importUploaded(alsbImportPlan)
     else:
-        print "[INFO] OSB project '%s' will get overlaid" % sb_project
+        print "[INFO] OSB project '%s' will get overlaid" % sbconfig_project
         alsbJarInfo = config_mbean.getImportJarInfo()
         print "[INFO] Use default import plan"
         alsbImportPlan = alsbJarInfo.getDefaultImportPlan()
@@ -97,8 +94,8 @@ def importSBConfigFile(config_mbean):
             raise
 
 def applyCustomizationFile(config_mbean):
-    print "[INFO] Loading customization file '%s'" % osb_customization_file
-    iStream = FileInputStream(osb_customization_file)
+    print "[INFO] Loading customization file '%s'" % sbconfig_customization_file
+    iStream = FileInputStream(sbconfig_customization_file)
     customizationList = Customization.fromXML(iStream)
     config_mbean.customize(customizationList)
 
@@ -114,7 +111,7 @@ def main():
         else:
             print "[INFO] Authentication type: 'login/password'"
             connect(admin_username, admin_password, admin_server_url)
-	
+
         # Create a configuration session
         domainRuntime()
         sessionName = String("Customization" + Long(System.currentTimeMillis()).toString())

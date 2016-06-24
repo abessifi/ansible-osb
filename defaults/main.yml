@@ -67,3 +67,10 @@ osb_admin_password: 'manager1'
 osb_managed_servers_per_machine: 1
 osb_managed_server_listen_port_start: 8000
 osb_managed_server_listen_address: "localhost"
+
+#
+# Import OSB project options
+#
+osb_sbconfig_jar_file: '/tmp/sbconfig.jar'
+osb_sbconfig_customization_file: '/tmp/ALSBCustomizationFile.xml'
+osb_sbconfig_project: 'default'

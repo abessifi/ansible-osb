@@ -42,3 +42,8 @@
   become_user: root
   tags:
     - always
+
+- include: impex.yml
+  when: osb_already_configured
+  become: yes
+  become_user: "{{ oracle.user }}"

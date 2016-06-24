@@ -20,6 +20,7 @@ osb:
   install_response_file: '/tmp/osb.rsp'
   logs_dir: "{{ oracle.home_dir }}/logs"
   scripts_dir: "{{ oracle.home_dir }}/scripts"
+  config_dir: "{{ oracle.home_dir }}/config"
 
 #
 # Default JVM Heap size for AdminServer, Managed Servers and Coherence

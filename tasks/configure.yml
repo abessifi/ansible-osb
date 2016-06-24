@@ -12,7 +12,7 @@
     group: "{{ oracle.group }}"
   with_items:
     - { src: osb_set_environment_variables.sh.j2 , dest: "{{ osb.scripts_dir }}/osb_set_environment_variables.sh" }
-    - { src: osb_environment.properties.j2, dest: "{{ osb.scripts_dir }}/osb_environment.properties" }
+    - { src: osb_environment.properties.j2, dest: "{{ osb.config_dir }}/osb_environment.properties" }
 
 #
 # Create and configure the OSB cluster
@@ -20,6 +20,11 @@
 
 - name: Create the OSB cluster
   shell: "{{ osb.scripts_dir }}/osb_create_basic_domain_service.sh > {{ osb.logs_dir }}/create_osb_cluster_$(date +'%F').log 2>&1"
+  register: create_cluster_cmd
+
+- set_fact:
+    osb_already_configured: true
+  when: create_cluster_cmd.rc == 0
 
 - name: Create AdminServer securtiy directory
   file:

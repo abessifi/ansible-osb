@@ -16,7 +16,8 @@ export RUNTIME_HOME
 
 # Directory that will be used as the middleware home (holds software binaries)
 MIDDLEWARE_HOME="{{ middleware_home_dir }}"
-export MIDDLEWARE_HOME
+MW_HOME="{{ middleware_home_dir }}"
+export MIDDLEWARE_HOME MW_HOME
 
 # Location of the Oracle inventory
 ORACLE_INVENTORY_HOME="${BASE_DIRECTORY}/inventory"

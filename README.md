@@ -101,6 +101,11 @@ In case of a plain installation using this Ansible role such as a combination of
 - **`osb_coherence_server_heap_size`** -  The Coherence server heap size (default: `256m`)
 - **`osb_coherence_server_perm_size`** - The Coherence server permanent generation size (default: `128m`)
 
+#### Import OSB project parameters
+
+- **`osb_sbconfig_jar_file`** - Path to the OSB project's JAR file to be imported (default: `/tmp/sbconfig.jar`)
+- **`osb_sbconfig_customization_file`** - Path to the OSB project's customization XML file to be applied (default: `/tmp/ALSBCustomizationFile.xml`)
+
 ## Available tags
 
 - **`osb-create-db-schemas`** - Specify this tag to create the OSB schemas using RCU.
@@ -115,6 +120,7 @@ In case of a plain installation using this Ansible role such as a combination of
 - **`osb-stop-adminserver`** - Stops the AdminServer process.
 - **`osb-start-managed-servers`** - Starts the Managed Servers processes.
 - **`osb-stop-managed-servers`** - Stops the Managed Servers processes.
+- **`osb-import-project`** - Import existing OSB project.
 
 ## Local facts
 
@@ -194,6 +200,24 @@ That's all ! It's now time to call Ansible to provision your server. Here is an 
 - In the above playbook example, the `db.weblogic.local` refers to the host machine where the oracle database is installed and the `osb.weblogic.local` is the FQDN of the server we are provisioning.
 - Make sure you have updated `/etc/hosts` file, so the FQDNs `db.weblogic.local` and `osb.weblogic.local` can be resolved correctly. Otherwise, replace the FQDNs by IP address in the playbook.
 - You need to create and adapt the Ansible inventory files and variables to suit your environment (services ports, IP addresses, etc)
+
+### Import OSB project
+
+You can use the magic tag `osb-import-project` to import an existing OSB project exported as a JAR file and apply a customization file to adapt the OSB platform to feet the required configuration. To do so you have just to specify the input project JAR and XML customization files:
+
+```yaml
+- hosts: ansible-vm
+  roles:
+    - role: ansible-osb
+      osb_sbconfig_jar_file: '/srv/files/osb_cabestan.jar'
+      osb_sbconfig_customization_file: '/srv/files/ALSBCustomizationFile_cabestan.xml'
+```
+
+	$ ansible-playbook --user=<user-name> --connection=ssh --timeout=30 --inventory-file=inventory.ini --tags='osb-import-project' -v provision.yml
+
+**Notes:**
+- Mainly the OSB 11g projects may be imported to the 12c platform.
+- If importation fails, take a look to the default log file `/home/oracle/logs/osb_import_project_<timestamp>.log` to identify the failure root reason.
 
 ### Purge existing OSB schemas
 

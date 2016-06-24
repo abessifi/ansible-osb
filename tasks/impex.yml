@@ -1,0 +1,29 @@
+---
+# This playbook is used to import and export OSB projects with a WLST script
+
+#
+# Export
+#
+# TODO
+
+#
+# Import
+#
+
+- name: Copy SBConfig JAR and XML customization files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ oracle.user }}"
+    group: "{{ oracle.group }}"
+    mode: 0750
+  with_items:
+    - { src: "{{ osb_sbconfig_jar_file }}", dest: "{{ osb.config_dir }}/sbconfig.jar" }
+    - { src: "{{ osb_sbconfig_customization_file }}", dest: "{{ osb.config_dir }}/ALSBCustomizationFile.xml" }
+  tags:
+    - osb-import-project
+
+- name: Import OSB project
+  shell: "{{ osb.scripts_dir }}/osb_import_project.sh >> {{ osb.logs_dir }}/osb_import_project_$(date +'%F').log 2>&1"
+  tags:
+    - osb-import-project

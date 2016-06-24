@@ -8,7 +8,9 @@ SCRIPT_PATH=$(dirname $SCRIPT)
 source ${SCRIPT_PATH}/osb_set_environment_variables.sh
 
 create_basic_domain() {
-	${FUSION_MIDDLEWARE_HOME}/common/bin/wlst.sh -loadProperties ${SCRIPT_PATH}/osb_environment.properties ${SCRIPT_PATH}/osb_create_basic_domain.py
+	${FUSION_MIDDLEWARE_HOME}/common/bin/wlst.sh \
+	  -loadProperties ${SCRIPT_PATH}/../config/osb_environment.properties \
+		${SCRIPT_PATH}/osb_create_basic_domain.py
 }
 
 change_memory_settings() {
